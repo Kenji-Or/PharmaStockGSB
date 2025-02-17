@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GSB</string>
+    <string name="se_connecter">Se connecter</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mot_de_passe">Mot de passe</string>
+    <string name="email">Email</string>
+    <string name="logo_description">logo GSB</string>
+    <string name="mot_de_passe_oublie">Mot de passe oublié</string>
+</resources>
