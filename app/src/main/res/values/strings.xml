@@ -7,4 +7,5 @@
     <string name="email">Email</string>
     <string name="logo_description">logo GSB</string>
     <string name="mot_de_passe_oublie">Mot de passe oublié</string>
+    <string name="connexion_en_cours">Connexion en cours...</string>
 </resources>
