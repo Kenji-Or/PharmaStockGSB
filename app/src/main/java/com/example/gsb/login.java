@@ -21,6 +21,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import android.text.style.ClickableSpan;
 
 import com.android.volley.Request;
@@ -40,47 +43,35 @@ import java.util.Map;
 
 
 public class login extends Fragment {
-    private EditText editTextEmail;
-    private EditText editTextPassword;
+    FragmentLoginBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        binding = FragmentLoginBinding.inflate(inflater, container, false);
+        return binding.getRoot();
+    }
 
-        editTextEmail = view.findViewById(R.id.editTextEmail);
-        editTextPassword = view.findViewById(R.id.editTextPassword);
-        Button buttonLogin = view.findViewById(R.id.buttonLogin);
-        TextView motDePasseOublie = view.findViewById(R.id.textViewMotDePasseOublie);
-        String text = getString(R.string.mot_de_passe_oublie);
-
-        SpannableString spannableString = getSpannableString(text);
-        motDePasseOublie.setText(spannableString);
-        motDePasseOublie.setMovementMethod(LinkMovementMethod.getInstance());
-        motDePasseOublie.setHighlightColor(Color.TRANSPARENT); // Pour éviter le fond de couleur lors du clic
-
-
-        buttonLogin.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        binding.buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email = editTextEmail.getText().toString();
-                String password = editTextPassword.getText().toString();
+                String email = binding.editTextEmail.getText().toString();
+                String password = binding.editTextPassword.getText().toString();
 
-                if (validateInput(email, password)) {
-                    // Logique de connexion ici
-                    loginRequest(email, password);
-                    // Si la connexion est réussie, redirigez vers HomeActivity
-//                    Intent intent = new Intent(getActivity(), HomeActivity.class);
-//                    startActivity(intent);
-//                    // Optionnel : Finir l'activité actuelle pour qu'elle ne soit plus dans la pile
-//                    getActivity().finish();
+                if(validateInput(email, password)) {
+                    loginRequest(email,password);
                 } else {
                     Toast.makeText(getActivity(), "Veuillez entrer un email et un mot de passe valides.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-        return view;
+        String text = getString(R.string.mot_de_passe_oublie);
+        binding.textViewMotDePasseOublie.setText(getSpannableString(text));
+        binding.textViewMotDePasseOublie.setMovementMethod(LinkMovementMethod.getInstance());
+        binding.textViewMotDePasseOublie.setHighlightColor(Color.TRANSPARENT); // Pour éviter le fond de couleur lors du clic
     }
 
     @NonNull
@@ -139,10 +130,11 @@ public class login extends Fragment {
                             Toast.makeText(getActivity(), "Login successful", Toast.LENGTH_SHORT).show();
                             // Sauvegarder le token pour un usage futur
                             saveToken(token);
-                            // Rediriger vers HomeActivity ou un autre fragment
-                            Intent intent = new Intent(getActivity(), HomeActivity.class);
-                            startActivity(intent);
-                            getActivity().finish();
+                            FragmentManager fragmentManager = getParentFragmentManager();
+                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            HomeFragment homeFragment = new HomeFragment();
+                            fragmentTransaction.replace(R.id.fragment_container, homeFragment);
+                            fragmentTransaction.commit();
                         } else {
                             // Si la réponse ne contient pas de token, c'est une erreur
                             Toast.makeText(getActivity(), "Erreur: " + response.toString(), Toast.LENGTH_LONG).show();

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        style="@style/toolBar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+        app:title="Tableau de Bord"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+            <Button
+                android:id="@+id/buttonManageMedications"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cornerRadius="20dp"
+                android:text="@string/gestion_medicaments"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonExpirationDates"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cornerRadius="20dp"
+                android:text="@string/suivi_dates_expiration"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonAdvancedSearch"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cornerRadius="20dp"
+                android:text="@string/recherche_avancee"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonStockAlerts"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:cornerRadius="20dp"
+                android:text="@string/gestion_alertes_stock"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonViewProfile"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cornerRadius="20dp"
+                android:text="@string/profile"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
+                android:id="@+id/buttonParams"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cornerRadius="20dp"
+                android:text="@string/parametre"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

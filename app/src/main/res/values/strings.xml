@@ -8,4 +8,10 @@
     <string name="logo_description">logo GSB</string>
     <string name="mot_de_passe_oublie">Mot de passe oublié</string>
     <string name="connexion_en_cours">Connexion en cours...</string>
+    <string name="gestion_medicaments">Gestion des médicaments</string>
+    <string name="suivi_dates_expiration">Suivi dates d\'expiration</string>
+    <string name="recherche_avancee">Recherche avancée</string>
+    <string name="gestion_alertes_stock">Gestion Alertes de stock</string>
+    <string name="profile">profile</string>
+    <string name="parametre">Paramètre</string>
 </resources>
