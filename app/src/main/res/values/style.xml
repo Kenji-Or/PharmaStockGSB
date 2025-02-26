@@ -5,9 +5,12 @@
         <item name="android:backgroundTint">@color/bleu</item>
     </style>
     <style name="toolBar">
-        <item name="android:background">@color/bleu</item>
+        <item name="android:background">@color/gris</item>
     </style>
     <style name="homeButton">
-        <item name="backgroundTint">@color/gris</item>
+        <item name="backgroundTint">@color/bleu</item>
+    </style>
+    <style name="buttonLogout">
+        <item name="android:backgroundTint">@color/green</item>
     </style>
 </resources>

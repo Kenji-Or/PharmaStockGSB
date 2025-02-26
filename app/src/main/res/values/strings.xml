@@ -14,4 +14,5 @@
     <string name="gestion_alertes_stock">Gestion Alertes de stock</string>
     <string name="profile">profile</string>
     <string name="parametre">Paramètre</string>
+    <string name="deconnexion">Déconnexion</string>
 </resources>
