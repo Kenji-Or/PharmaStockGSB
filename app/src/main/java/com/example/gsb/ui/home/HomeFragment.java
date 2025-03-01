@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentHomeBinding;
 import com.example.gsb.ui.login.LoginFragment;
+import com.example.gsb.ui.profile.ProfileFragment;
 
 public class HomeFragment extends Fragment {
 
@@ -41,6 +42,18 @@ public class HomeFragment extends Fragment {
             showLoading();
             homeViewModel.logout();
         });
+
+        binding.buttonViewProfile.setOnClickListener(v -> {
+            navigateToProfileFragment();
+        });
+    }
+
+    private void navigateToProfileFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
     }
 
     private void setupObservers() {

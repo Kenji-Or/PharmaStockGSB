@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class AuthRepository {
-
     private final ApiService apiService;
 
     public AuthRepository() {
@@ -36,11 +35,24 @@ public class AuthRepository {
             public void onError(String errorMessage) {
                 callback.onResult(new LoginResult(false, errorMessage));
             }
+
+            // ✅ Ajout de l'implémentation manquante
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onResult(new LoginResult(false, "Échec de la requête : " + errorMessage));
+            }
         });
     }
 
+
     public void logout(LogoutCallback callback) {
         String token = SharedPrefsHelper.getToken(MyApplication.getAppContext());
+
+        if (token == null || token.isEmpty()) {
+            callback.onResult(new LogoutResult(false, "Utilisateur non connecté"));
+            return;
+        }
+
         apiService.logout(token, new ApiService.ApiCallback<String>() {
             @Override
             public void onSuccess(String response) {
@@ -52,7 +64,18 @@ public class AuthRepository {
             public void onError(String errorMessage) {
                 callback.onResult(new LogoutResult(false, errorMessage));
             }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onResult(new LogoutResult(false, "Échec de la requête : " + errorMessage));
+            }
         });
+    }
+
+    // ✅ Ajout d'une méthode pour vérifier si l'utilisateur est connecté
+    public boolean isLoggedIn() {
+        String token = SharedPrefsHelper.getToken(MyApplication.getAppContext());
+        return token != null && !token.isEmpty();
     }
 
     public interface LoginCallback {

@@ -22,4 +22,8 @@ public class HomeViewModel extends ViewModel {
     public void logout() {
         authRepository.logout(result -> logoutResult.postValue(result));
     }
+
+    public void viewProfile() {
+
+    }
 }
