@@ -12,7 +12,12 @@
     <string name="suivi_dates_expiration">Suivi dates d\'expiration</string>
     <string name="recherche_avancee">Recherche avancée</string>
     <string name="gestion_alertes_stock">Gestion Alertes de stock</string>
-    <string name="profile">profile</string>
+    <string name="profile">Profile</string>
     <string name="parametre">Paramètre</string>
     <string name="deconnexion">Déconnexion</string>
+    <string name="retour">Retour</string>
+    <string name="modifier">Modifier</string>
+    <string name="nom">Nom :</string>
+    <string name="email_profile">Email :</string>
+    <string name="role">Rôle :</string>
 </resources>

@@ -41,8 +41,15 @@ public class ProfileFragment extends Fragment {
             if (user != null) {
                 binding.profileName.setText(user.getFirstName() + " " + user.getLastName());
                 binding.profileEmail.setText(user.getEmail());
+                if (user.getRole() == 1) {
+                    binding.profileRole.setText("Admin");
+                } else {
+                    binding.profileRole.setText("Utilisateur");
+                }
             }
         });
+
+        binding.buttonBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
 
         // ✅ Gestion des erreurs
         profileViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {

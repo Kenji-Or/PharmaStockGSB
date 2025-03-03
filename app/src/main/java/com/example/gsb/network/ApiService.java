@@ -65,7 +65,7 @@ public class ApiService {
     }
 
     public void getUserById(String token, ApiCallback<JSONObject> callback) {
-        String url = BASE_URL + "userId";
+        String url = BASE_URL + "user/userInfo";
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> callback.onSuccess(response),
@@ -82,25 +82,6 @@ public class ApiService {
         RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
         queue.add(request);
     }
-
-//    public void getUserById(String token, Long id, ApiCallback<JSONObject> callback) {
-//        String url = BASE_URL + "user/" + id;
-//
-//        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-//                response -> callback.onSuccess(response),
-//                error -> callback.onError("Erreur récupération user: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
-//            @Override
-//            public Map<String, String> getHeaders() {
-//                Map<String, String> headers = new HashMap<>();
-//                headers.put("Authorization", "Bearer " + token);
-//                headers.put("Content-Type", "application/json");
-//                return headers;
-//            }
-//        };
-//
-//        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
-//        queue.add(request);
-//    }
 
     public interface ApiCallback<T> {
         void onSuccess(T response);
