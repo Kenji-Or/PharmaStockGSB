@@ -20,8 +20,8 @@
 
         <ImageButton
             android:id="@+id/buttonBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:src="@drawable/baseline_arrow_back_24"
             android:contentDescription="@string/retour"
             android:background="?attr/selectableItemBackgroundBorderless"

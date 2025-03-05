@@ -83,6 +83,35 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void updateUser(String firstName, String lastName, String email, String password, String token, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "user/editUser";
+        JSONObject jsonBody = new JSONObject();
+        try {
+            if (firstName != null) jsonBody.put("firstName", firstName);
+            if (lastName != null) jsonBody.put("lastName", lastName);
+            if (email != null) jsonBody.put("mail", email);
+            if (password != null) jsonBody.put("password", password);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public interface ApiCallback<T> {
         void onSuccess(T response);
         void onError(String errorMessage);

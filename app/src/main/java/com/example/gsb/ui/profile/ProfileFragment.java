@@ -8,8 +8,13 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+
+import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentProfileBinding;
+import com.example.gsb.ui.home.HomeFragment;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class ProfileFragment extends Fragment {
@@ -36,7 +41,6 @@ public class ProfileFragment extends Fragment {
             Toast.makeText(getContext(), "Erreur: Token invalide", Toast.LENGTH_SHORT).show();
         }
 
-        // ✅ Mise à jour des infos utilisateur
         profileViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
             if (user != null) {
                 binding.profileName.setText(user.getFirstName() + " " + user.getLastName());
@@ -49,7 +53,11 @@ public class ProfileFragment extends Fragment {
             }
         });
 
-        binding.buttonBack.setOnClickListener(v -> requireActivity().getSupportFragmentManager().popBackStack());
+        binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
+
+        binding.buttonEditUser.setOnClickListener(v -> {
+            navigateToEditProfileFragment();
+        });
 
         // ✅ Gestion des erreurs
         profileViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
@@ -57,5 +65,21 @@ public class ProfileFragment extends Fragment {
                 Toast.makeText(getContext(), "Erreur: " + errorMessage, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void navigateToEditProfileFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
+    }
+
+    private void navigateToHomeFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
     }
 }

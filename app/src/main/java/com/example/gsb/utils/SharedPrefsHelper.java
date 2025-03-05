@@ -6,8 +6,8 @@ import android.content.SharedPreferences;
 import com.example.gsb.MyApplication;
 
 public class SharedPrefsHelper {
-    private static final String PREFS_NAME = "UserPrefs";
-    private static final String TOKEN_KEY = "auth_token";
+    private static final String PREFS_NAME = "GSB_PREFS";
+    private static final String TOKEN_KEY = "USER_TOKEN";
 
     /**
      * Sauvegarde le jeton d'authentification dans les préférences partagées.

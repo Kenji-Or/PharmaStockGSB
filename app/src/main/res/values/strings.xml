@@ -20,4 +20,8 @@
     <string name="nom">Nom :</string>
     <string name="email_profile">Email :</string>
     <string name="role">Rôle :</string>
+    <string name="prenom">Prénom</string>
+    <string name="nouveau_mot_de_passe">Nouveau mot de passe</string>
+    <string name="enregistrer">Enregistrer</string>
+    <string name="annuler">Annuler</string>
 </resources>
