@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,9 @@ import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentHomeBinding;
 import com.example.gsb.ui.login.LoginFragment;
 import com.example.gsb.ui.profile.ProfileFragment;
+import com.example.gsb.ui.users.UserListFragment;
+import com.example.gsb.utils.JwtUtils;
+import com.example.gsb.utils.SharedPrefsHelper;
 
 public class HomeFragment extends Fragment {
 
@@ -28,6 +32,15 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
+        String token = SharedPrefsHelper.getToken(requireContext());
+        String role = JwtUtils.getRoleFromToken(token);
+        if (role != null) {
+            if (role.equals("1")) { // Si rôle admin, on affiche le bouton
+                binding.buttonGestionUsers.setVisibility(View.VISIBLE);
+            } else { // Si rôle non-admin, on masque le bouton
+                binding.buttonGestionUsers.setVisibility(View.GONE);
+            }
+        }
         return binding.getRoot();
     }
 
@@ -46,12 +59,24 @@ public class HomeFragment extends Fragment {
         binding.buttonViewProfile.setOnClickListener(v -> {
             navigateToProfileFragment();
         });
+
+        binding.buttonGestionUsers.setOnClickListener(v -> {
+            navigateToGestionUsersFragment();
+        });
     }
 
     private void navigateToProfileFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new ProfileFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
+    }
+
+    private void navigateToGestionUsersFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new UserListFragment());
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
     }

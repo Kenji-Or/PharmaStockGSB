@@ -82,6 +82,16 @@
                 android:textColor="@android:color/white" />
 
             <Button
+                android:id="@+id/buttonGestionUsers"
+                style="@style/homeButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cornerRadius="20dp"
+                android:text="@string/gestion_des_utilisateurs"
+                android:layout_marginBottom="18dp"
+                android:textColor="@android:color/white" />
+
+            <Button
                 android:id="@+id/buttonViewProfile"
                 style="@style/homeButton"
                 android:layout_width="match_parent"

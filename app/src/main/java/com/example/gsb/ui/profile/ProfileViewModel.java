@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel;
 import com.example.gsb.data.model.User;
 import com.example.gsb.data.repository.UserRepository;
 
+import java.util.List;
+
 public class ProfileViewModel extends ViewModel {
     private final UserRepository userRepository;
     private final MutableLiveData<User> user = new MutableLiveData<>();
@@ -21,6 +23,10 @@ public class ProfileViewModel extends ViewModel {
 
     public void loadUserData(String token) {
         userRepository.getUserbyId(token, new UserRepository.UserCallback() {
+
+            @Override
+            public void onSuccess(List<User> userList) {
+            }
             @Override
             public void onResult(User userData) {
                 if (userData != null) {
@@ -29,7 +35,7 @@ public class ProfileViewModel extends ViewModel {
             }
 
             @Override
-            public void onFailure(String error) { // ✅ Ajout de la gestion des erreurs
+            public void onFailure(String error) { //  Ajout de la gestion des erreurs
                 errorMessage.postValue(error);
             }
         });
@@ -37,6 +43,11 @@ public class ProfileViewModel extends ViewModel {
 
     public void updateUser(String firstName, String lastName, String email, String password, String token) {
         userRepository.editUser(firstName, lastName, email, password, token, new UserRepository.UserCallback() {
+
+            @Override
+            public void onSuccess(List<User> userList) {
+            }
+
             @Override
             public void onResult(User updatedUser) {
                 user.postValue(updatedUser);

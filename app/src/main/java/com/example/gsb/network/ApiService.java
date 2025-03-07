@@ -3,12 +3,14 @@ package com.example.gsb.network;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.example.gsb.MyApplication;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -55,6 +57,25 @@ public class ApiService {
                 if (token != null) {
                     headers.put("Authorization", "Bearer " + token);
                 }
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
+    public void getAllUser(String token, ApiCallback<JSONArray> callback) {
+        String url = BASE_URL + "users";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                callback::onSuccess,
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
                 headers.put("Content-Type", "application/json");
                 return headers;
             }

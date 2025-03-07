@@ -1,18 +1,60 @@
 package com.example.gsb.data.repository;
 
+import android.util.Log;
+
 import com.example.gsb.MyApplication;
 import com.example.gsb.data.model.User;
 import com.example.gsb.network.ApiService;
 import com.example.gsb.utils.SharedPrefsHelper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserRepository {
     private final ApiService apiService;
 
     public UserRepository() {
         this.apiService = new ApiService();
+    }
+
+    public void getAllUsers(String token, final UserCallback callback) {
+        apiService.getAllUser(token, new ApiService.ApiCallback<JSONArray>() {
+            @Override
+            public void onSuccess(JSONArray response) {
+                List<User> userList = new ArrayList<>();
+                try {
+                    for(int i = 0; i < response.length(); i++) {
+                        JSONObject userJson = response.getJSONObject(i);
+                        User user = new User(
+                                userJson.getLong("id"),
+                                userJson.getString("firstName"),
+                                userJson.getString("lastName"),
+                                userJson.getString("mail"),
+                                userJson.getInt("role")
+                        );
+                        userList.add(user);
+                    }
+                    callback.onSuccess(userList);
+                } catch (JSONException e) {
+                    Log.e("UserListViewModel", "Erreur de parsing JSON", e);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure(errorMessage);
+                Log.e("UserListViewModel", "Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+        });
     }
 
     public void getUserbyId(String token, final UserCallback callback) {
@@ -27,7 +69,7 @@ public class UserRepository {
                     String email = response.getString("mail");
                     int role = response.getInt("role");
 
-                    User user = new User(userId, firstName, lastName, email, null, role);
+                    User user = new User(userId, firstName, lastName, email, role);
                     callback.onResult(user);
                 } catch (JSONException e) {
                     callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
@@ -66,7 +108,7 @@ public class UserRepository {
                     }
 
                     // Mise a jour d'un objet User avec les données entrées
-                    User updatedUser = new User(userId, updatedFirstName, updatedLastName, updatedEmail, null, role);
+                    User updatedUser = new User(userId, updatedFirstName, updatedLastName, updatedEmail, role);
 
                     // Appelle le callback avec l'utilisateur mis à jour
                     callback.onResult(updatedUser);
@@ -88,7 +130,9 @@ public class UserRepository {
     }
 
     public interface UserCallback {
-        void onResult(User user);
-        void onFailure(String errorMessage); // ✅ Ajout de cette méthode
+        void onSuccess(List<User> users);  // ✅ Pour récupérer une liste d'utilisateurs
+        void onResult(User user);  // ✅ Pour récupérer un utilisateur unique
+        void onFailure(String errorMessage);
     }
+
 }

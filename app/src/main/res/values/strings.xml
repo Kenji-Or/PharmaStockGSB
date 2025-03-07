@@ -24,4 +24,7 @@
     <string name="nouveau_mot_de_passe">Nouveau mot de passe</string>
     <string name="enregistrer">Enregistrer</string>
     <string name="annuler">Annuler</string>
+    <string name="gestion_des_utilisateurs">Gestion des utilisateurs</string>
+    <string name="liste_des_utilisateurs">Liste des Utilisateurs</string>
+    <string name="ajouter_un_utilisateur">Ajouter un Utilisateur</string>
 </resources>
