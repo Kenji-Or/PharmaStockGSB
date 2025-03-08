@@ -88,6 +88,39 @@ public class UserRepository {
         });
     }
 
+    public void createUser(String token, String firstName, String lastName, String email, int idRole, String password, final UserCallback callback) {
+        apiService.createUser(token, firstName, lastName, email, idRole, password, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    // Vérifier si l'utilisateur a bien été créé et récupérer les infos
+                    long userId = response.getLong("id");
+                    String createdFirstName = response.getString("firstName");
+                    String createdLastName = response.getString("lastName");
+                    String createdEmail = response.getString("mail");
+                    int createdRole = response.getInt("role");
+
+                    User newUser = new User(userId, createdFirstName, createdLastName, createdEmail, createdRole);
+                    callback.onResult(newUser); // Retourne l'utilisateur créé
+                } catch (JSONException e) {
+                    callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la création de l'utilisateur: " + errorMessage);
+            }
+        });
+    }
+
+
+
     public void editUser(String firstName, String lastName, String email, String password, String token, final UserCallback callback) {
         apiService.updateUser(firstName, lastName, email, password, token, new ApiService.ApiCallback<JSONObject>() {
             @Override

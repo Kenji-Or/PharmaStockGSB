@@ -9,11 +9,15 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.example.gsb.MyApplication;
+import com.example.gsb.data.model.Role;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ApiService {
@@ -66,6 +70,26 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void getAllRoles(String token, ApiCallback<JSONArray> callback) {
+        String url = BASE_URL + "roles";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                callback::onSuccess,
+                error -> callback.onFailure("Erreur API: " + error.getMessage())
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void getAllUser(String token, ApiCallback<JSONArray> callback) {
         String url = BASE_URL + "users";
 
@@ -103,6 +127,38 @@ public class ApiService {
         RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
         queue.add(request);
     }
+
+    public void createUser(String token, String firstName, String lastName, String email, int idRole, String password, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "user/create";
+        JSONObject jsonBody = new JSONObject();
+
+        try {
+            jsonBody.put("firstName", firstName);
+            jsonBody.put("lastName", lastName);
+            jsonBody.put("mail", email);
+            jsonBody.put("password", password);
+            jsonBody.put("role", idRole);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
 
     public void updateUser(String firstName, String lastName, String email, String password, String token, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/editUser";

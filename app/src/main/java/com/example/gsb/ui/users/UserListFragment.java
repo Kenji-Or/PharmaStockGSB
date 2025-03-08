@@ -90,12 +90,22 @@ public class UserListFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
+
+        binding.fabAddUser.setOnClickListener(v -> navigateToCreateUserFragment());
     }
 
     private void navigateToHomeFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new HomeFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
+    }
+
+    private void navigateToCreateUserFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new CreateUserFragment());
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
     }

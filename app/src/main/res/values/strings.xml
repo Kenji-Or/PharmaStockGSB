@@ -27,4 +27,9 @@
     <string name="gestion_des_utilisateurs">Gestion des utilisateurs</string>
     <string name="liste_des_utilisateurs">Liste des Utilisateurs</string>
     <string name="ajouter_un_utilisateur">Ajouter un Utilisateur</string>
+    <string name="creer_un_utilisateur">Créer un utilisateur</string>
+    <string name="creer_utilisateur">Créer Utilisateur</string>
+    <string name="confimer_le_mot_de_passe">Confimer le mot de passe</string>
+    <string name="edit_user">Edit User</string>
+    <string name="delete_user">Delete User</string>
 </resources>
