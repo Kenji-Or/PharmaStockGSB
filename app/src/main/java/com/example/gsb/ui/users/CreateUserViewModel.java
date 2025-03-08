@@ -31,6 +31,10 @@ public class CreateUserViewModel extends ViewModel {
             }
 
             @Override
+            public void onDeleted() {
+            }
+
+            @Override
             public void onResult(User user) {
                 userCreated.postValue(true);
             }

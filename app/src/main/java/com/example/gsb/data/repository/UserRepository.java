@@ -162,9 +162,29 @@ public class UserRepository {
         });
     }
 
+    public void deleteUser(String token, Long userId, final UserCallback callback) {
+        apiService.deleteUser(token, userId, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                callback.onDeleted();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la mise à jour: " + errorMessage);
+            }
+        });
+    }
+
     public interface UserCallback {
         void onSuccess(List<User> users);  // ✅ Pour récupérer une liste d'utilisateurs
         void onResult(User user);  // ✅ Pour récupérer un utilisateur unique
+        void onDeleted();
         void onFailure(String errorMessage);
     }
 

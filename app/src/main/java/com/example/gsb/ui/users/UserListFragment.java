@@ -1,5 +1,6 @@
 package com.example.gsb.ui.users;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,10 +24,9 @@ import com.example.gsb.utils.SharedPrefsHelper;
 
 import java.util.List;
 
-public class UserListFragment extends Fragment {
+public class UserListFragment extends Fragment implements UserListAdapter.OnUserActionListener {
     private UserListViewModel userListViewModel;
     private UserListAdapter adapter;
-
     private FragmentUsersListBinding binding;
 
     @Nullable
@@ -37,7 +37,7 @@ public class UserListFragment extends Fragment {
 
         // Set up RecyclerView and Adapter
         binding.recyclerViewUsers.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new UserListAdapter();
+        adapter = new UserListAdapter(this);
         binding.recyclerViewUsers.setAdapter(adapter);
 
         // Initialize ViewModel
@@ -87,6 +87,32 @@ public class UserListFragment extends Fragment {
     }
 
     @Override
+    public void onEditClick(User user) {
+        // Naviguer vers un fragment de modification de l'utilisateur
+        Toast.makeText(getContext(), "Modifier: " + user.getFirstName(), Toast.LENGTH_SHORT).show();
+//        navigateToEditUserFragment();
+    }
+
+    @Override
+    public void onDeleteClick(User user) {
+        // Show a confirmation dialog before deleting
+        new AlertDialog.Builder(getContext())
+                .setMessage("Êtes-vous sûr de vouloir supprimer cet utilisateur ?")
+                .setCancelable(false)
+                .setPositiveButton("Oui", (dialog, id) -> {
+                    String token = SharedPrefsHelper.getToken(requireContext());
+                    if (token != null) {
+                        userListViewModel.deleteUser(token, user.getId());
+                        Toast.makeText(getContext(), "Utilisateur supprimé", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), "Token invalide. Connexion requise.", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Non", null)
+                .show();
+    }
+
+    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
@@ -101,6 +127,14 @@ public class UserListFragment extends Fragment {
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
     }
+
+//    private void navigateToEditUserFragment() {
+//        FragmentManager fragmentManager = getParentFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.replace(R.id.fragment_container, new EditUserFragment());
+//        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+//        fragmentTransaction.commit();
+//    }
 
     private void navigateToCreateUserFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();

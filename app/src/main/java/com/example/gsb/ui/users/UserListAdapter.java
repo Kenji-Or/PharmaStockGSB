@@ -3,6 +3,7 @@ package com.example.gsb.ui.users;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserViewHolder> {
+
     private List<User> users = new ArrayList<>();
+    private OnUserActionListener listener;
+
+    // Interface pour gérer les clics sur les icônes
+    public interface OnUserActionListener {
+        void onEditClick(User user);
+        void onDeleteClick(User user);
+    }
+
+    // Constructeur avec le listener
+    public UserListAdapter(OnUserActionListener listener) {
+        this.listener = listener;
+    }
 
     public void setUsers(List<User> users) {
         this.users = users;
@@ -34,6 +48,10 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
         User user = users.get(position);
         holder.textViewName.setText(user.getFirstName() + " " + user.getLastName());
         holder.textViewEmail.setText(user.getEmail());
+
+        // Set up click listeners for the icons
+        holder.editIcon.setOnClickListener(v -> listener.onEditClick(user));
+        holder.deleteIcon.setOnClickListener(v -> listener.onDeleteClick(user));
     }
 
     @Override
@@ -42,12 +60,16 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserVi
     }
 
     static class UserViewHolder extends RecyclerView.ViewHolder {
+
         TextView textViewName, textViewEmail;
+        ImageView editIcon, deleteIcon;
 
         public UserViewHolder(@NonNull View itemView) {
             super(itemView);
             textViewName = itemView.findViewById(R.id.textViewName);
             textViewEmail = itemView.findViewById(R.id.textViewEmail);
+            editIcon = itemView.findViewById(R.id.editIcon);
+            deleteIcon = itemView.findViewById(R.id.deleteIcon);
         }
     }
 }

@@ -40,6 +40,10 @@ public class UserListViewModel extends ViewModel {
             }
 
             @Override
+            public void onDeleted() {
+            }
+
+            @Override
             public void onResult(User user) {
                 // On ne fait rien ici car on attend une liste, pas un seul utilisateur
             }
@@ -48,6 +52,35 @@ public class UserListViewModel extends ViewModel {
             public void onFailure(String error) {
                 isLoading.postValue(false);
                 errorMessage.postValue("Erreur API : " + error);
+            }
+        });
+    }
+
+    public void deleteUser(String token, long userId) {
+        isLoading.setValue(true);
+
+        userRepository.deleteUser(token, userId, new UserRepository.UserCallback() {
+            @Override
+            public void onSuccess(List<User> users) {
+                isLoading.postValue(false);
+                fetchUsers(token); // Recharger les utilisateurs après suppression
+            }
+
+            @Override
+            public void onDeleted() {
+                isLoading.postValue(false);
+                fetchUsers(token); // Rafraîchir la liste des utilisateurs après suppression
+            }
+
+            @Override
+            public void onResult(User user) {
+                // This won't be called for delete, so we can leave it empty
+            }
+
+            @Override
+            public void onFailure(String error) {
+                isLoading.postValue(false);
+                errorMessage.postValue("Erreur API: " + error);
             }
         });
     }

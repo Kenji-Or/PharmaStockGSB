@@ -27,6 +27,10 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void onSuccess(List<User> userList) {
             }
+
+            @Override
+            public void onDeleted() {
+            }
             @Override
             public void onResult(User userData) {
                 if (userData != null) {
@@ -46,6 +50,10 @@ public class ProfileViewModel extends ViewModel {
 
             @Override
             public void onSuccess(List<User> userList) {
+            }
+
+            @Override
+            public void onDeleted() {
             }
 
             @Override

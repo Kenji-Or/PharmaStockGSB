@@ -189,6 +189,25 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void deleteUser(String token, Long userId, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "user/delete/" + userId;
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                response -> callback.onSuccess(null),
+                error -> callback.onFailure("Erreur de suppression : " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public interface ApiCallback<T> {
         void onSuccess(T response);
         void onError(String errorMessage);
