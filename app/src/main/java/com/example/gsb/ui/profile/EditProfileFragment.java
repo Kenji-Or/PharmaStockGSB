@@ -11,8 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
-//import androidx.navigation.NavController;
-//import androidx.navigation.Navigation;
 import com.example.gsb.R;
 import com.example.gsb.data.model.User;
 import com.example.gsb.databinding.FragmentEditProfileBinding;
@@ -36,13 +34,12 @@ public class EditProfileFragment extends Fragment {
 
         String token = SharedPrefsHelper.getToken(requireContext());
 
-        if (token != null && !token.isEmpty()) {  // ✅ Vérifie que le token n'est pas vide
-            profileViewModel.loadUserData(token);
+        if (token != null && !token.isEmpty() && getArguments() != null) {
+            Long userId = getArguments().getLong("user_id", -1);
+            profileViewModel.loadUserData(token, userId);
         } else {
             Toast.makeText(getContext(), "Erreur: Token invalide", Toast.LENGTH_SHORT).show();
         }
-
-//        NavController navController = Navigation.findNavController(view);
 
         // Récupérer les infos actuelles de l'utilisateur
         profileViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
@@ -81,7 +78,7 @@ public class EditProfileFragment extends Fragment {
             if (!isPasswordChanged) newPassword = null;
 
 
-            profileViewModel.updateUser(newFirstName, newLastName, newEmail, newPassword, token);
+            profileViewModel.updateUser(currentUser.getId(),newFirstName, newLastName, newEmail, null, newPassword, token);
             profileViewModel.getUpdateSuccess().observe(getViewLifecycleOwner(), success -> {
                 if (success) {
                     Toast.makeText(getContext(), "Mise à jour réussie", Toast.LENGTH_SHORT).show();

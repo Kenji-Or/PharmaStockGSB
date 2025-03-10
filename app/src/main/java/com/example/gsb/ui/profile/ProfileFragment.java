@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentProfileBinding;
 import com.example.gsb.ui.home.HomeFragment;
+import com.example.gsb.utils.JwtUtils;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class ProfileFragment extends Fragment {
@@ -34,9 +35,12 @@ public class ProfileFragment extends Fragment {
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         String token = SharedPrefsHelper.getToken(requireContext());
+        String stringUserId = JwtUtils.getUserIdFromToken(token);
+        assert stringUserId != null;
+        Long userId = Long.parseLong(stringUserId);
 
         if (token != null && !token.isEmpty()) {  // ✅ Vérifie que le token n'est pas vide
-            profileViewModel.loadUserData(token);
+            profileViewModel.loadUserData(token, userId);
         } else {
             Toast.makeText(getContext(), "Erreur: Token invalide", Toast.LENGTH_SHORT).show();
         }
@@ -56,7 +60,7 @@ public class ProfileFragment extends Fragment {
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
 
         binding.buttonEditUser.setOnClickListener(v -> {
-            navigateToEditProfileFragment();
+            navigateToEditProfileFragment(userId);
         });
 
         // ✅ Gestion des erreurs
@@ -67,11 +71,15 @@ public class ProfileFragment extends Fragment {
         });
     }
 
-    private void navigateToEditProfileFragment() {
+    private void navigateToEditProfileFragment(Long userId) {
+        EditProfileFragment editProfileFragment = new EditProfileFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("user_id", userId); // Ajout de l'ID de l'utilisateur
+        editProfileFragment.setArguments(bundle);
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, new EditProfileFragment());
-        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.replace(R.id.fragment_container, editProfileFragment);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 

@@ -57,8 +57,8 @@ public class UserRepository {
         });
     }
 
-    public void getUserbyId(String token, final UserCallback callback) {
-        apiService.getUserById(token, new ApiService.ApiCallback<JSONObject>() {
+    public void getUserbyId(String token, Long userId, final UserCallback callback) {
+        apiService.getUserById(token, userId, new ApiService.ApiCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
                 try {
@@ -121,8 +121,8 @@ public class UserRepository {
 
 
 
-    public void editUser(String firstName, String lastName, String email, String password, String token, final UserCallback callback) {
-        apiService.updateUser(firstName, lastName, email, password, token, new ApiService.ApiCallback<JSONObject>() {
+    public void editUser(Long userId, String firstName, String lastName, String email, Integer role, String password, String token, final UserCallback callback) {
+        apiService.updateUser(userId, firstName, lastName, email, role, password, token, new ApiService.ApiCallback<JSONObject>() {
             @Override
             public void onSuccess(JSONObject response) {
                 try {

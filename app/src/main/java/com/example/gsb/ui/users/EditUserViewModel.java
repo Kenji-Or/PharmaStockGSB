@@ -1,24 +1,37 @@
-package com.example.gsb.ui.profile;
+package com.example.gsb.ui.users;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.gsb.data.model.Role;
 import com.example.gsb.data.model.User;
+import com.example.gsb.data.repository.RoleRepository;
 import com.example.gsb.data.repository.UserRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProfileViewModel extends ViewModel {
+public class EditUserViewModel extends ViewModel {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final MutableLiveData<User> user = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<List<Role>> roles = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> updateSuccess = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>(); // ✅ Gestion des erreurs
 
-    private final MutableLiveData<Boolean> updateSuccess = new MutableLiveData<>();
+    public EditUserViewModel() {
+        this.roleRepository = new RoleRepository();
+        this.userRepository = new UserRepository();
+    }
 
+    public LiveData<Boolean> getIsLoading() {
+        return isLoading;
+    }
 
-    public ProfileViewModel() {
-        userRepository = new UserRepository();
+    public LiveData<String> getErrorMessage() {
+        return errorMessage;
     }
 
     public void loadUserData(String token, Long userId) {
@@ -64,8 +77,23 @@ public class ProfileViewModel extends ViewModel {
 
             @Override
             public void onFailure(String error) {
+                isLoading.postValue(false);
                 errorMessage.postValue(error);
-                updateSuccess.postValue(false);
+            }
+        });
+    }
+
+    public void loadRoles(String token) {
+        roleRepository.getAllRoles(token, new RoleRepository.RoleCallback() {
+            @Override
+            public void onSuccess(List<Role> roleList) {
+                roles.postValue(roleList);  // Mettre à jour LiveData avec la liste des rôles
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                // Gérer l'erreur (afficher un message d'erreur si nécessaire)
+                roles.postValue(new ArrayList<>());
             }
         });
     }
@@ -73,13 +101,13 @@ public class ProfileViewModel extends ViewModel {
     public LiveData<User> getUser() {
         return user;
     }
-
-    public LiveData<String> getErrorMessage() { // ✅ Exposition de l'erreur à l'UI
-        return errorMessage;
+    public LiveData<List<Role>> getRoles() {
+        return roles;  // Retourner les rôles en LiveData
     }
 
     public LiveData<Boolean> getUpdateSuccess() {
         return updateSuccess;
     }
+
 
 }

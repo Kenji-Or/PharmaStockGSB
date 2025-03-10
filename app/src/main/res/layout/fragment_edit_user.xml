@@ -30,7 +30,7 @@
             android:id="@+id/textViewProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/creer_un_utilisateur"
+            android:text="@string/modifier_un_utilisateur"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"

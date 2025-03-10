@@ -88,9 +88,14 @@ public class UserListFragment extends Fragment implements UserListAdapter.OnUser
 
     @Override
     public void onEditClick(User user) {
-        // Naviguer vers un fragment de modification de l'utilisateur
-        Toast.makeText(getContext(), "Modifier: " + user.getFirstName(), Toast.LENGTH_SHORT).show();
-//        navigateToEditUserFragment();
+        EditUserFragment editUserFragment = new EditUserFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("user_id", user.getId()); // Ajout de l'ID de l'utilisateur
+        editUserFragment.setArguments(bundle);
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, editUserFragment);
+        transaction.addToBackStack(null); // Pour permettre le retour en arrière
+        transaction.commit();
     }
 
     @Override
@@ -127,14 +132,6 @@ public class UserListFragment extends Fragment implements UserListAdapter.OnUser
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
     }
-
-//    private void navigateToEditUserFragment() {
-//        FragmentManager fragmentManager = getParentFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.replace(R.id.fragment_container, new EditUserFragment());
-//        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
-//        fragmentTransaction.commit();
-//    }
 
     private void navigateToCreateUserFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();

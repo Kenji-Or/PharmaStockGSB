@@ -17,7 +17,7 @@
     <string name="deconnexion">Déconnexion</string>
     <string name="retour">Retour</string>
     <string name="modifier">Modifier</string>
-    <string name="nom">Nom :</string>
+    <string name="nom">Nom</string>
     <string name="email_profile">Email :</string>
     <string name="role">Rôle :</string>
     <string name="prenom">Prénom</string>
@@ -32,4 +32,5 @@
     <string name="confimer_le_mot_de_passe">Confimer le mot de passe</string>
     <string name="edit_user">Edit User</string>
     <string name="delete_user">Delete User</string>
+    <string name="modifier_un_utilisateur">Modifier un utilisateur</string>
 </resources>

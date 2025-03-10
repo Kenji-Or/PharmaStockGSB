@@ -109,8 +109,8 @@ public class ApiService {
         queue.add(request);
     }
 
-    public void getUserById(String token, ApiCallback<JSONObject> callback) {
-        String url = BASE_URL + "user/userInfo";
+    public void getUserById(String token, Long userId, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "user/" + userId;
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> callback.onSuccess(response),
@@ -160,13 +160,14 @@ public class ApiService {
     }
 
 
-    public void updateUser(String firstName, String lastName, String email, String password, String token, ApiCallback<JSONObject> callback) {
-        String url = BASE_URL + "user/editUser";
+    public void updateUser(Long userId, String firstName, String lastName, String email, Integer role, String password, String token, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "user/editUser/" + userId;
         JSONObject jsonBody = new JSONObject();
         try {
             if (firstName != null) jsonBody.put("firstName", firstName);
             if (lastName != null) jsonBody.put("lastName", lastName);
             if (email != null) jsonBody.put("mail", email);
+            if (role != null) jsonBody.put("role", role);
             if (password != null) jsonBody.put("password", password);
         } catch (Exception e) {
             callback.onError("Erreur JSON");
