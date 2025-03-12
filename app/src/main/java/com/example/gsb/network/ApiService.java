@@ -89,6 +89,25 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void getAllCategory(String token, ApiCallback<JSONArray> callback) {
+        String url = BASE_URL + "category";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                callback::onSuccess,
+                error -> callback.onFailure("Erreur API: " + error.getMessage())) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void getAllUser(String token, ApiCallback<JSONArray> callback) {
         String url = BASE_URL + "users";
 
@@ -146,6 +165,25 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void getCategoryById(String token, int id, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "category/" + id;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void getUserById(String token, Long userId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/" + userId;
 
@@ -175,6 +213,37 @@ public class ApiService {
             jsonBody.put("mail", email);
             jsonBody.put("password", password);
             jsonBody.put("role", idRole);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
+    public void createMedicament(String token, String name, int quantity, int category, String dateExpiration, int alerteStock, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "medicament/create";
+        JSONObject jsonBody = new JSONObject();
+
+        try {
+            jsonBody.put("name", name);
+            jsonBody.put("quantity", quantity);
+            jsonBody.put("category", category);
+            jsonBody.put("date_expiration", dateExpiration);
+            jsonBody.put("alerte_stock", alerteStock);
         } catch (Exception e) {
             callback.onError("Erreur JSON");
             return;

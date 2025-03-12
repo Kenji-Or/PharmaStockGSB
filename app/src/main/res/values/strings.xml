@@ -35,8 +35,12 @@
     <string name="modifier_un_utilisateur">Modifier un utilisateur</string>
     <string name="medicaments">Médicaments</string>
     <string name="ajouter_un_medicament">Ajouter un médicament</string>
-    <string name="nom_du_medicament">Nom du Médicament</string>
+    <string name="nom_du_medicament">Nom du Médicament :</string>
     <string name="quantite">Quantité :</string>
     <string name="categorie">Catégorie :</string>
     <string name="date_d_expiration">Date d\'expiration :</string>
+    <string name="quantiteAdd">Quantité</string>
+    <string name="date_dExpiration">Date d\'expiration</string>
+    <string name="alerte_stock">Alerte Stock :</string>
+    <string name="quantite_minimum_pour_alerte">Quantité minimum pour alerte</string>
 </resources>

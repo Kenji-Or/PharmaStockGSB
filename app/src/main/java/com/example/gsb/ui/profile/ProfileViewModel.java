@@ -1,24 +1,37 @@
 package com.example.gsb.ui.profile;
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.gsb.data.model.Role;
 import com.example.gsb.data.model.User;
+import com.example.gsb.data.repository.RoleRepository;
 import com.example.gsb.data.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ProfileViewModel extends ViewModel {
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private MutableLiveData<Map<Integer, String>> rolesMap = new MutableLiveData<>();
     private final MutableLiveData<User> user = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>(); // ✅ Gestion des erreurs
 
     private final MutableLiveData<Boolean> updateSuccess = new MutableLiveData<>();
+    public LiveData<Map<Integer, String>> getRolesMap() {
+        return rolesMap;
+    }
 
 
     public ProfileViewModel() {
-        userRepository = new UserRepository();
+        this.userRepository = new UserRepository();
+        this.roleRepository = new RoleRepository();
     }
 
     public void loadUserData(String token, Long userId) {
@@ -41,6 +54,24 @@ public class ProfileViewModel extends ViewModel {
             @Override
             public void onFailure(String error) { //  Ajout de la gestion des erreurs
                 errorMessage.postValue(error);
+            }
+        });
+    }
+
+    public void loadAllRoles(String token) {
+        roleRepository.getAllRoles(token, new RoleRepository.RoleCallback() {
+            @Override
+            public void onSuccess(List<Role> roleList) {
+                Map<Integer, String> map = new HashMap<>();
+                for (Role role : roleList) {
+                    map.put(role.getId_role(), role.getDescription());
+                }
+                rolesMap.postValue(map); // Met à jour le LiveData
+            }
+
+            @Override
+            public void onFailure(String error) {
+                Log.e("MedicamentListViewModel", "Erreur de récupération des catégories : " + error);
             }
         });
     }

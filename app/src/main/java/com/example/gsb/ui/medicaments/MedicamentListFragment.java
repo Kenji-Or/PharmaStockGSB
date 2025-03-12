@@ -40,6 +40,7 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
 
         if (token != null && !token.isEmpty()) {
             medicamentListViewModel.fetchMedicaments(token);
+            medicamentListViewModel.loadAllCategorie(token);
         } else {
             binding.errorTextView.setText("Aucun token trouvé. Veuillez vous connecter.");
             binding.errorTextView.setVisibility(View.VISIBLE);
@@ -51,7 +52,11 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-//        medicamentListViewModel = new ViewModelProvider(this).get(MedicamentListViewModel.class);
+        // Observer la mise à jour des catégories
+        medicamentListViewModel.getCategoriesMap().observe(getViewLifecycleOwner(), categoriesMap -> {
+            medicamentListAdapter.setCategoriesMap(categoriesMap);
+            medicamentListAdapter.notifyDataSetChanged();
+        });
 
         medicamentListViewModel.getMedicamentsLiveData().observe(getViewLifecycleOwner(), medicaments -> {
             if (medicaments != null) {
@@ -80,6 +85,7 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         });
 
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
+        binding.fabAddMedicament.setOnClickListener(v -> navigateToCreateMedicamentFragment());
     }
 
     @Override
@@ -109,5 +115,11 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         fragmentTransaction.commit();
     }
 
-
+    private void navigateToCreateMedicamentFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new CreateMedicamentFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

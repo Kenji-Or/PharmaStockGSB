@@ -4,11 +4,11 @@ public class Medicament {
     private Long id;
     private String name;
     private int quantite;
-    private Long category;
+    private int category;
     private String dateExpiration;
     private int alerte_stock;
 
-    public Medicament(Long id, String name, int quantite, Long category, String dateExpiration, int alerte_stock) {
+    public Medicament(Long id, String name, int quantite, int category, String dateExpiration, int alerte_stock) {
         this.id = id;
         this.name = name;
         this.quantite = quantite;
@@ -28,7 +28,7 @@ public class Medicament {
         return quantite;
     }
 
-    public Long getCategory() {
+    public int getCategory() {
         return category;
     }
 

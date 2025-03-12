@@ -41,20 +41,20 @@ public class ProfileFragment extends Fragment {
 
         if (token != null && !token.isEmpty()) {  // ✅ Vérifie que le token n'est pas vide
             profileViewModel.loadUserData(token, userId);
+            profileViewModel.loadAllRoles(token);
         } else {
             Toast.makeText(getContext(), "Erreur: Token invalide", Toast.LENGTH_SHORT).show();
         }
 
-        profileViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
-            if (user != null) {
-                binding.profileName.setText(user.getFirstName() + " " + user.getLastName());
-                binding.profileEmail.setText(user.getEmail());
-                if (user.getRole() == 1) {
-                    binding.profileRole.setText("Admin");
-                } else {
-                    binding.profileRole.setText("Utilisateur");
+        profileViewModel.getRolesMap().observe(getViewLifecycleOwner(), rolesMap -> {
+            profileViewModel.getUser().observe(getViewLifecycleOwner(), user -> {
+                if (user != null) {
+                    binding.profileName.setText(user.getFirstName() + " " + user.getLastName());
+                    binding.profileEmail.setText(user.getEmail());
+                    String roleName = rolesMap.get(user.getRole());
+                    binding.profileRole.setText(roleName != null ? roleName : "Rôle inconnu");
                 }
-            }
+            });
         });
 
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());

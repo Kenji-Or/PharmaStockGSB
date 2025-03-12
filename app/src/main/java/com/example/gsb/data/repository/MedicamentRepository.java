@@ -31,7 +31,7 @@ public class MedicamentRepository {
                                 medicamentJson.getLong("id"),
                                 medicamentJson.getString("name"),
                                 medicamentJson.getInt("quantity"),
-                                medicamentJson.getLong("category"),
+                                medicamentJson.getInt("category"),
                                 medicamentJson.getString("date_expiration"),
                                 medicamentJson.getInt("alerte_stock")
                         );
@@ -64,7 +64,7 @@ public class MedicamentRepository {
                     long idMedicament = response.getLong("id");
                     String nameMedicament = response.getString("name");
                     int quantiteMedicament = response.getInt("quantity");
-                    long categorieMedicament = response.getLong("category");
+                    int categorieMedicament = response.getInt("category");
                     String date_expiration = response.getString("date_expiration");
                     int alerte_stock = response.getInt("alerte_stock");
 
@@ -83,6 +83,38 @@ public class MedicamentRepository {
             @Override
             public void onFailure(String errorMessage) {
                 callback.onFailure(errorMessage);
+            }
+        });
+    }
+
+    public void createMedicament(String token, String name, int quantity, int category, String dateExpiration, int alerteStock, final MedicamentCallback callback) {
+        apiService.createMedicament(token, name, quantity, category, dateExpiration, alerteStock, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    // Vérifier si l'utilisateur a bien été créé et récupérer les infos
+                    long medicamentId = response.getLong("id");
+                    String createdName = response.getString("name");
+                    int createdQuantity = response.getInt("quantity");
+                    int createdCategory = response.getInt("category");
+                    String createdDateExpiration = response.getString("date_expiration");
+                    int createdAlerteStock = response.getInt("alerte_stock");
+
+                    Medicament medicament = new Medicament(medicamentId, createdName, createdQuantity, createdCategory, createdDateExpiration, createdAlerteStock);
+                    callback.onResult(medicament);
+                } catch (JSONException e) {
+                    callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la création du médicament: " + errorMessage);
             }
         });
     }

@@ -13,10 +13,13 @@ import com.example.gsb.R;
 import com.example.gsb.data.model.Medicament;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MedicamentListAdapter extends RecyclerView.Adapter<MedicamentListAdapter.MedicamentViewHolder> {
     private List<Medicament> medicaments = new ArrayList<>();
+    private Map<Integer, String> categoriesMap = new HashMap<>();
 
     private OnMedicamentActionListener listener;
 
@@ -27,6 +30,10 @@ public class MedicamentListAdapter extends RecyclerView.Adapter<MedicamentListAd
 
     public MedicamentListAdapter(OnMedicamentActionListener listener) {
         this.listener = listener;
+    }
+
+    public void setCategoriesMap(Map<Integer, String> categoriesMap) {
+        this.categoriesMap = categoriesMap;
     }
 
     public void setMedicaments(List<Medicament> medicaments) {
@@ -46,7 +53,8 @@ public class MedicamentListAdapter extends RecyclerView.Adapter<MedicamentListAd
         Medicament medicament = medicaments.get(position);
         holder.nomMedicament.setText(medicament.getName());
         holder.quantiteMedicament.setText(String.valueOf(medicament.getQuantite()));
-        holder.Category.setText(String.valueOf(medicament.getCategory()));
+        String categoryName = categoriesMap.get(medicament.getCategory());
+        holder.Category.setText(categoryName != null ? categoryName : "Catégorie inconnue");
         holder.dateExpiration.setText(medicament.getDateExpiration());
 
         holder.deleteIconMedicament.setOnClickListener(v -> listener.onDeleteClick(medicament));
