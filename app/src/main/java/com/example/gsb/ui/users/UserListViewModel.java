@@ -12,8 +12,6 @@ public class UserListViewModel extends ViewModel {
     private final MutableLiveData<List<User>> usersLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
-    private final MutableLiveData<User> user = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> updateSuccess = new MutableLiveData<>();
 
     public UserListViewModel() {
         this.userRepository = new UserRepository();

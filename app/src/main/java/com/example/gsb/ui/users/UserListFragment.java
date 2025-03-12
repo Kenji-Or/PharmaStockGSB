@@ -19,10 +19,8 @@ import com.example.gsb.R;
 import com.example.gsb.data.model.User;
 import com.example.gsb.databinding.FragmentUsersListBinding;
 import com.example.gsb.ui.home.HomeFragment;
-import com.example.gsb.ui.profile.ProfileViewModel;
 import com.example.gsb.utils.SharedPrefsHelper;
 
-import java.util.List;
 
 public class UserListFragment extends Fragment implements UserListAdapter.OnUserActionListener {
     private UserListViewModel userListViewModel;

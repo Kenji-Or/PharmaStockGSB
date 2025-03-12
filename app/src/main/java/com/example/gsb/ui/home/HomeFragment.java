@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentHomeBinding;
 import com.example.gsb.ui.login.LoginFragment;
+import com.example.gsb.ui.medicaments.MedicamentListFragment;
 import com.example.gsb.ui.profile.ProfileFragment;
 import com.example.gsb.ui.users.UserListFragment;
 import com.example.gsb.utils.JwtUtils;
@@ -63,6 +64,8 @@ public class HomeFragment extends Fragment {
         binding.buttonGestionUsers.setOnClickListener(v -> {
             navigateToGestionUsersFragment();
         });
+
+        binding.buttonManageMedications.setOnClickListener(v -> goToMedicamentListFragment());
     }
 
     private void navigateToProfileFragment() {
@@ -97,6 +100,13 @@ public class HomeFragment extends Fragment {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new LoginFragment());
+        fragmentTransaction.commit();
+    }
+
+    private void goToMedicamentListFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new MedicamentListFragment());
         fragmentTransaction.commit();
     }
 

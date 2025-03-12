@@ -9,7 +9,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import com.example.gsb.MyApplication;
-import com.example.gsb.data.model.Role;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -109,6 +108,44 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void getAllMedicaments(String token, ApiCallback<JSONArray> callback) {
+        String url = BASE_URL + "medicaments";
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                callback::onSuccess,
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
+    public void getMedicamentById(String token, Long medicamentId, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "medicament/" + medicamentId;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void getUserById(String token, Long userId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/" + userId;
 
@@ -192,6 +229,25 @@ public class ApiService {
 
     public void deleteUser(String token, Long userId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/delete/" + userId;
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                response -> callback.onSuccess(null),
+                error -> callback.onFailure("Erreur de suppression : " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
+    public void deleteMedicament(String token, Long medicamentId, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "medicament/" + medicamentId;
 
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 response -> callback.onSuccess(null),
