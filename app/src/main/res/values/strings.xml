@@ -43,4 +43,5 @@
     <string name="date_dExpiration">Date d\'expiration</string>
     <string name="alerte_stock">Alerte Stock :</string>
     <string name="quantite_minimum_pour_alerte">Quantité minimum pour alerte</string>
+    <string name="alerte_stock_detail_medicament">Alerte Stock :</string>
 </resources>

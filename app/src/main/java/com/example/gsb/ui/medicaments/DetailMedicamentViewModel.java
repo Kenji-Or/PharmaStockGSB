@@ -15,57 +15,61 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MedicamentListViewModel extends ViewModel {
+public class DetailMedicamentViewModel extends ViewModel {
     private final MedicamentRepository medicamentRepository;
     private final CategorieRepository categorieRepository;
     private MutableLiveData<Map<Integer, String>> categoriesMap = new MutableLiveData<>();
-    private final MutableLiveData<List<Medicament>> medicamentsLiveData = new MutableLiveData<>();
-    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
+    private final MutableLiveData<Medicament> medicament = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> updateSuccess = new MutableLiveData<>();
+    private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
 
-    public MedicamentListViewModel() {
+    public DetailMedicamentViewModel() {
         this.medicamentRepository = new MedicamentRepository();
         this.categorieRepository = new CategorieRepository();
     }
 
-    public LiveData<List<Medicament>> getMedicamentsLiveData() {
-        return medicamentsLiveData;
+    public LiveData<Map<Integer, String>> getCategoriesMap() {
+        return categoriesMap;
+    }
+    public LiveData<Medicament> getMedicament() {
+        return medicament;
     }
 
+    public LiveData<String> getErrorMessage() { // ✅ Exposition de l'erreur à l'UI
+        return errorMessage;
+    }
+
+    public LiveData<Boolean> getUpdateSuccess() {
+        return updateSuccess;
+    }
     public LiveData<Boolean> getIsLoading() {
         return isLoading;
     }
 
-    public LiveData<String> getErrorMessage() {
-        return errorMessage;
-    }
-    public LiveData<Map<Integer, String>> getCategoriesMap() {
-        return categoriesMap;
-    }
-
-    public void fetchMedicaments(String token) {
+    public void loadMedicamentData(String token, Long medicamentId){
         isLoading.setValue(true);
-        medicamentRepository.getAllMedicaments(token, new MedicamentRepository.MedicamentCallback() {
+        medicamentRepository.getMedicamentById(token, medicamentId, new MedicamentRepository.MedicamentCallback() {
             @Override
             public void onSuccess(List<Medicament> medicaments) {
-                isLoading.postValue(false);
-                medicamentsLiveData.postValue(medicaments);
             }
 
             @Override
-            public void onResult(Medicament medicament) {
-
+            public void onResult(Medicament medicamentData) {
+                if (medicamentData != null) {
+                    isLoading.postValue(false);
+                    medicament.postValue(medicamentData);
+                }
             }
 
             @Override
             public void onDeleted() {
-
             }
 
             @Override
             public void onFailure(String error) {
                 isLoading.postValue(false);
-                errorMessage.postValue("Erreur API : " + error);
+                errorMessage.postValue(error);
             }
         });
     }
@@ -88,35 +92,7 @@ public class MedicamentListViewModel extends ViewModel {
 
             @Override
             public void onFailure(String error) {
-                Log.e("MedicamentListViewModel", "Erreur de récupération des catégories : " + error);
-            }
-        });
-    }
-
-    public void deleteMedicament(String token, Long id) {
-        isLoading.setValue(true);
-
-        medicamentRepository.deleteMedicamentById(token, id, new MedicamentRepository.MedicamentCallback() {
-            @Override
-            public void onSuccess(List<Medicament> medicaments) {
-                isLoading.postValue(false);
-                fetchMedicaments(token);
-            }
-
-            @Override
-            public void onResult(Medicament medicament) {
-            }
-
-            @Override
-            public void onDeleted() {
-                isLoading.postValue(false);
-                fetchMedicaments(token);
-            }
-
-            @Override
-            public void onFailure(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue("Erreur API: " + error);
+                Log.e("DetailMedicamentViewModel", "Erreur de récupération des catégories : " + error);
             }
         });
     }

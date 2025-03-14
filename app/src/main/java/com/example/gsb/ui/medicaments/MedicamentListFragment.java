@@ -19,6 +19,7 @@ import com.example.gsb.R;
 import com.example.gsb.data.model.Medicament;
 import com.example.gsb.databinding.FragmentMedicamentListBinding;
 import com.example.gsb.ui.home.HomeFragment;
+import com.example.gsb.ui.users.EditUserFragment;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class MedicamentListFragment extends Fragment implements MedicamentListAdapter.OnMedicamentActionListener {
@@ -105,6 +106,18 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
                 })
                 .setNegativeButton("Non", null)
                 .show();
+    }
+
+    @Override
+    public void onDetailsClick(Medicament medicament) {
+        DetailMedicamentFragment detailMedicamentFragment = new DetailMedicamentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("medicament_id", medicament.getIdMedicament()); // Ajout de l'ID du médicament
+        detailMedicamentFragment.setArguments(bundle);
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, detailMedicamentFragment);
+        transaction.addToBackStack(null); // Pour permettre le retour en arrière
+        transaction.commit();
     }
 
     private void navigateToHomeFragment() {

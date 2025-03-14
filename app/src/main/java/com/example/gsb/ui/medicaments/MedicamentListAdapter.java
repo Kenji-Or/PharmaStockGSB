@@ -24,7 +24,7 @@ public class MedicamentListAdapter extends RecyclerView.Adapter<MedicamentListAd
     private OnMedicamentActionListener listener;
 
     public interface OnMedicamentActionListener {
-        //void onDetailsClick(Medicament medicament);
+        void onDetailsClick(Medicament medicament);
         void onDeleteClick(Medicament medicament);
     }
 
@@ -58,6 +58,8 @@ public class MedicamentListAdapter extends RecyclerView.Adapter<MedicamentListAd
         holder.dateExpiration.setText(medicament.getDateExpiration());
 
         holder.deleteIconMedicament.setOnClickListener(v -> listener.onDeleteClick(medicament));
+        // Clic sur l'élément complet (CardView)
+        holder.itemView.setOnClickListener(v -> listener.onDetailsClick(medicament));
     }
 
     @Override
