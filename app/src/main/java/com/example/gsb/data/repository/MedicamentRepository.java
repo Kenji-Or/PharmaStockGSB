@@ -119,6 +119,38 @@ public class MedicamentRepository {
         });
     }
 
+    public void updateMedicament(String token, Long medicamentId, String name, Integer quantity, Integer categorie, String dateExpiration, Integer alerteStock, final MedicamentCallback callback) {
+        apiService.updateMedicament(token,medicamentId, name, quantity, categorie, dateExpiration, alerteStock, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    // Vérifier si l'utilisateur a bien été créé et récupérer les infos
+                    long medicamentId = response.getLong("id");
+                    String updateName = response.getString("name");
+                    int updateQuantity = response.getInt("quantity");
+                    int updateCategory = response.getInt("category");
+                    String updateDateExpiration = response.getString("date_expiration");
+                    int updateAlerteStock = response.getInt("alerte_stock");
+
+                    Medicament updateMedicament = new Medicament(medicamentId, updateName, updateQuantity, updateCategory, updateDateExpiration, updateAlerteStock);
+                    callback.onResult(updateMedicament);
+                } catch (JSONException e) {
+                    callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la mise à jour: " + errorMessage);
+            }
+        });
+    }
+
     public void deleteMedicamentById(String token, Long medicamentId, final MedicamentCallback callback) {
         apiService.deleteMedicament(token, medicamentId, new ApiService.ApiCallback<JSONObject>() {
             @Override

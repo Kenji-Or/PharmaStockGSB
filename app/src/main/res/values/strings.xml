@@ -44,4 +44,5 @@
     <string name="alerte_stock">Alerte Stock :</string>
     <string name="quantite_minimum_pour_alerte">Quantité minimum pour alerte</string>
     <string name="alerte_stock_detail_medicament">Alerte Stock :</string>
+    <string name="name_editMedicament">Nom :</string>
 </resources>

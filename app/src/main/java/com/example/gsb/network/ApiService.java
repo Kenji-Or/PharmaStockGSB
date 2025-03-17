@@ -296,6 +296,37 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void updateMedicament(String token, Long idMedicament, String name, Integer quantity, Integer categorie, String dateExpiration, Integer alerteStock, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "medicament/" + idMedicament;
+        JSONObject jsonBody = new JSONObject();
+
+        try{
+            if (name != null) jsonBody.put("name", name);
+            if (quantity != null) jsonBody.put("quantity", quantity);
+            if (categorie != null) jsonBody.put("category", categorie);
+            if (dateExpiration != null && !dateExpiration.isEmpty()) jsonBody.put("date_expiration", dateExpiration);
+            if (alerteStock != null) jsonBody.put("alerte_stock", alerteStock);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void deleteUser(String token, Long userId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/delete/" + userId;
 

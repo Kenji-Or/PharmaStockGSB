@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentDetailMedicamentBinding;
+import com.example.gsb.ui.users.EditUserFragment;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class DetailMedicamentFragment extends Fragment {
@@ -34,8 +35,8 @@ public class DetailMedicamentFragment extends Fragment {
         detailMedicamentViewModel = new ViewModelProvider(this).get(DetailMedicamentViewModel.class);
 
         String token = SharedPrefsHelper.getToken(requireContext());
+        Long medicamentId = getArguments().getLong("medicament_id", -1);
         if (token != null && !token.isEmpty() && getArguments() != null) {
-            Long medicamentId = getArguments().getLong("medicament_id", -1);
             detailMedicamentViewModel.loadAllCategorie(token);
             detailMedicamentViewModel.loadMedicamentData(token, medicamentId);
         }
@@ -53,7 +54,17 @@ public class DetailMedicamentFragment extends Fragment {
            });
         });
 
-        binding.buttonBack.setOnClickListener(v -> navigateToEditMedicamentFragment());
+        binding.buttonBack.setOnClickListener(v -> navigateToMedicamentListFragment());
+        binding.btnModifierDetailMedicament.setOnClickListener(v -> {
+            EditMedicamentFragment editMedicamentFragment = new EditMedicamentFragment();
+            Bundle bundle = new Bundle();
+            bundle.putLong("medicament_id", medicamentId); // Ajout de l'ID de l'utilisateur
+            editMedicamentFragment.setArguments(bundle);
+            FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.fragment_container, editMedicamentFragment);
+            transaction.addToBackStack(null); // Pour permettre le retour en arrière
+            transaction.commit();
+        });
 
         // ✅ Gestion des erreurs
         detailMedicamentViewModel.getErrorMessage().observe(getViewLifecycleOwner(), errorMessage -> {
@@ -63,7 +74,7 @@ public class DetailMedicamentFragment extends Fragment {
         });
     }
 
-    private void navigateToEditMedicamentFragment() {
+    private void navigateToMedicamentListFragment() {
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new MedicamentListFragment());
