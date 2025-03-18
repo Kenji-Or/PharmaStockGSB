@@ -27,7 +27,7 @@
             android:id="@+id/textViewEditMedicament"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nom du Médicament"
+            android:text="@string/modification_medicament"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"

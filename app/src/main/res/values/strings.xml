@@ -45,4 +45,13 @@
     <string name="quantite_minimum_pour_alerte">Quantité minimum pour alerte</string>
     <string name="alerte_stock_detail_medicament">Alerte Stock :</string>
     <string name="name_editMedicament">Nom :</string>
+    <string name="categoriesList">Catégories</string>
+    <string name="modification_medicament">Modification médicament</string>
+    <string name="ajouter_une_categorie">Ajouter une catégorie</string>
+    <string name="modifier_la_categorie">Modifier la catégorie</string>
+    <string name="supprimer_la_categorie">Supprimer la catégorie</string>
+    <string name="categories">Catégories</string>
+    <string name="nouvelle_categorie">Nouvelle catégorie</string>
+    <string name="nomCategorie">Nom :</string>
+    <string name="modification_d_une_categorie">Modification d\'une catégorie</string>
 </resources>

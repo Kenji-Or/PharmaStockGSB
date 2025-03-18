@@ -69,7 +69,7 @@ public class EditMedicamentFragment extends Fragment {
                             binding.categorieEditMedicament.setSelection(position);
                         }
                     } else {
-                        Toast.makeText(getContext(), "Échec de la création du médicament.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Échec de la récupération du médicament.", Toast.LENGTH_SHORT).show();
                     }
                 });
 

@@ -91,6 +91,10 @@ public class DetailMedicamentViewModel extends ViewModel {
             }
 
             @Override
+            public void onDeleted() {
+            }
+
+            @Override
             public void onFailure(String error) {
                 Log.e("DetailMedicamentViewModel", "Erreur de récupération des catégories : " + error);
             }

@@ -76,10 +76,84 @@ public class CategorieRepository {
         });
     }
 
+    public void createCategorie(String token, String name, CategoryCallback callback) {
+        apiService.createCategory(token, name, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    int categorieId = response.getInt("id_category");
+                    String nameCategorie = response.getString("name");
+
+                    Categorie newCategorie = new Categorie(categorieId, nameCategorie);
+                    callback.onResult(newCategorie);
+                } catch (JSONException e) {
+                    callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+        });
+    }
+
+    public void updateCategorie(String token, int categorieId, String nameCategorie, CategoryCallback callback) {
+        apiService.updateCategorie(token, categorieId, nameCategorie, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                try {
+                    int idCategorie = response.getInt("id");
+                    String categorieName = response.getString("name");
+
+                    Categorie updateCategorie = new Categorie(idCategorie, categorieName);
+                    callback.onResult(updateCategorie);
+                } catch (JSONException e) {
+                    callback.onFailure("Erreur lors du parsing JSON: " + e.getMessage());
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la mise à jour: " + errorMessage);
+            }
+        });
+    }
+
+    public void deleteCategorie(String token, int categorieId, CategoryCallback callback) {
+        apiService.deleteCategorie(token, categorieId, new ApiService.ApiCallback<JSONObject>() {
+            @Override
+            public void onSuccess(JSONObject response) {
+                callback.onDeleted();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure("Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure("Échec de la mise à jour: " + errorMessage);
+            }
+        });
+    }
+
 
     public interface CategoryCallback {
         void onSuccess(List<Categorie> categories);
         void onResult(Categorie categorie);
+        void onDeleted();
         void onFailure(String errorMessage);
     }
 }

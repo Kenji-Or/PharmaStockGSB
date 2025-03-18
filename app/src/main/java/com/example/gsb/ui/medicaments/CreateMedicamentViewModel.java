@@ -41,7 +41,7 @@ public class CreateMedicamentViewModel extends ViewModel {
 
             @Override
             public void onFailure(String errorMessage) {
-                medicamentCreated.postValue(true);
+                medicamentCreated.postValue(false);
             }
         });
     }
@@ -55,6 +55,10 @@ public class CreateMedicamentViewModel extends ViewModel {
 
             @Override
             public void onResult(Categorie categorie){
+            }
+
+            @Override
+            public void onDeleted() {
             }
 
             @Override

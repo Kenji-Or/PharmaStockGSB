@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -30,27 +28,16 @@
             android:id="@+id/textViewProfile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/medicaments"
+            android:text="@string/categoriesList"
             android:textSize="22sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
             android:layout_gravity="center"/>
-
-        <ImageButton
-            android:id="@+id/buttonNavigateCategorie"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@android:drawable/ic_menu_more"
-            android:contentDescription="Plus"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:layout_gravity="end"
-            />
-
     </androidx.appcompat.widget.Toolbar>
 
     <!-- ProgressBar pour afficher le chargement -->
     <ProgressBar
-        android:id="@+id/progressBar"
+        android:id="@+id/progressBarCategorie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -62,7 +49,7 @@
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewMedicaments"
+        android:id="@+id/recyclerViewCategorie"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
@@ -72,24 +59,24 @@
 
     <!-- TextView pour afficher les erreurs -->
     <TextView
-        android:id="@+id/errorTextView"
+        android:id="@+id/errorTextViewCategorie"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="16sp"
         android:gravity="center"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewMedicaments"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewCategorie"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- FloatingActionButton pour ajouter un utilisateur -->
+    <!-- FloatingActionButton pour ajouter une catégorie -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAddMedicament"
+        android:id="@+id/fabAddCategorie"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/baseline_add_24"
-        android:contentDescription="@string/ajouter_un_medicament"
+        android:contentDescription="@string/ajouter_une_categorie"
         app:backgroundTint="@color/black"
         app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"

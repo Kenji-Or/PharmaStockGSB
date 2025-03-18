@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,8 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.gsb.R;
 import com.example.gsb.data.model.Medicament;
 import com.example.gsb.databinding.FragmentMedicamentListBinding;
+import com.example.gsb.ui.categorie.CategorieFragment;
 import com.example.gsb.ui.home.HomeFragment;
-import com.example.gsb.ui.users.EditUserFragment;
+import com.example.gsb.utils.JwtUtils;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class MedicamentListFragment extends Fragment implements MedicamentListAdapter.OnMedicamentActionListener {
@@ -45,6 +47,15 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         } else {
             binding.errorTextView.setText("Aucun token trouvé. Veuillez vous connecter.");
             binding.errorTextView.setVisibility(View.VISIBLE);
+        }
+
+        String role = JwtUtils.getRoleFromToken(token);
+        if (role != null) {
+            if (role.equals("1")) { // Si rôle admin, on affiche le bouton
+                binding.buttonNavigateCategorie.setVisibility(View.VISIBLE);
+            } else { // Si rôle non-admin, on masque le bouton
+                binding.buttonNavigateCategorie.setVisibility(View.GONE);
+            }
         }
         return binding.getRoot();
     }
@@ -87,6 +98,18 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
 
         binding.buttonBack.setOnClickListener(v -> navigateToHomeFragment());
         binding.fabAddMedicament.setOnClickListener(v -> navigateToCreateMedicamentFragment());
+        binding.buttonNavigateCategorie.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(requireContext(), v);
+            popup.getMenuInflater().inflate(R.menu.menu_options, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                if (item.getItemId() == R.id.action_settings) {
+                    navigateToCategorieFragment();
+                    return true;
+                }
+                return false;
+            });
+            popup.show();
+        });
     }
 
     @Override
@@ -132,6 +155,14 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         FragmentManager fragmentManager = getParentFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, new CreateMedicamentFragment());
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    private void navigateToCategorieFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new CategorieFragment());
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

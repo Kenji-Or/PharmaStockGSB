@@ -265,6 +265,33 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void createCategory(String token, String name, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "category/create";
+        JSONObject jsonBody = new JSONObject();
+
+        try{
+            jsonBody.put("name", name);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
 
     public void updateUser(Long userId, String firstName, String lastName, String email, Integer role, String password, String token, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/editUser/" + userId;
@@ -327,6 +354,33 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void updateCategorie(String token, int categorieId, String nameCategorie, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "category/" + categorieId;
+        JSONObject jsonBody = new JSONObject();
+
+        try{
+            if (nameCategorie != null) jsonBody.put("name", nameCategorie);
+        } catch (Exception e) {
+            callback.onError("Erreur JSON");
+            return;
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.PATCH, url, jsonBody,
+                response -> callback.onSuccess(response),
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void deleteUser(String token, Long userId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/delete/" + userId;
 
@@ -348,6 +402,25 @@ public class ApiService {
 
     public void deleteMedicament(String token, Long medicamentId, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "medicament/" + medicamentId;
+
+        StringRequest request = new StringRequest(Request.Method.DELETE, url,
+                response -> callback.onSuccess(null),
+                error -> callback.onFailure("Erreur de suppression : " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
+    public void deleteCategorie(String token, int categorieId, ApiCallback<JSONObject> callback) {
+        String url = BASE_URL + "category/" + categorieId;
 
         StringRequest request = new StringRequest(Request.Method.DELETE, url,
                 response -> callback.onSuccess(null),

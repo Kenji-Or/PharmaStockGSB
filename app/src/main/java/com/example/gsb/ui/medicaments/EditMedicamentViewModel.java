@@ -110,6 +110,10 @@ public class EditMedicamentViewModel extends ViewModel {
             }
 
             @Override
+            public void onDeleted() {
+            }
+
+            @Override
             public void onFailure(String errorMessage) {
                 categories.postValue(new ArrayList<>());
             }
