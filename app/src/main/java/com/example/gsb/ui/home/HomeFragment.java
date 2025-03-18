@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -14,20 +13,24 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.gsb.R;
+import com.example.gsb.data.model.Medicament;
 import com.example.gsb.databinding.FragmentHomeBinding;
 import com.example.gsb.ui.login.LoginFragment;
+import com.example.gsb.ui.medicaments.DetailMedicamentFragment;
 import com.example.gsb.ui.medicaments.MedicamentListFragment;
 import com.example.gsb.ui.profile.ProfileFragment;
 import com.example.gsb.ui.users.UserListFragment;
 import com.example.gsb.utils.JwtUtils;
 import com.example.gsb.utils.SharedPrefsHelper;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements MedicamentExpiredDateListAdapter.OnMedicamentExpiredDateActionListener {
 
     private FragmentHomeBinding binding;
     private HomeViewModel homeViewModel;
+    private MedicamentExpiredDateListAdapter medicamentExpiredDateListAdapter;
     private AlertDialog progressDialog;
 
     @Override
@@ -48,9 +51,30 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        binding.recyclerViewDateExpirationHome.setLayoutManager(new LinearLayoutManager(getContext()));
+        medicamentExpiredDateListAdapter = new MedicamentExpiredDateListAdapter(this);
+        binding.recyclerViewDateExpirationHome.setAdapter(medicamentExpiredDateListAdapter);
+        String token = SharedPrefsHelper.getToken(requireContext());
+        if (token != null && !token.isEmpty()) {
+            homeViewModel.fetchMedicamentExpiredDate(token);
+        }
         setupObservers();
+
+        homeViewModel.getMedicamentsDateExpirationLiveData().observe(getViewLifecycleOwner(), medicaments -> {
+            if (medicaments != null) {
+                medicamentExpiredDateListAdapter.setMedicaments(medicaments);
+                binding.recyclerViewDateExpirationHome.setVisibility(View.VISIBLE);
+            }
+        });
+
+        homeViewModel.getIsLoading().observe(getViewLifecycleOwner(), isLoading -> {
+            if (isLoading) {
+                binding.progressBarHome.setVisibility(View.VISIBLE);
+            } else {
+                binding.progressBarHome.setVisibility(View.GONE);
+            }
+        });
 
         binding.buttonLogout.setOnClickListener(v -> {
             showLoading();
@@ -123,5 +147,17 @@ public class HomeFragment extends Fragment {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+    @Override
+    public void onDetailsClick(Medicament medicament) {
+        DetailMedicamentFragment detailMedicamentFragment = new DetailMedicamentFragment();
+        Bundle bundle = new Bundle();
+        bundle.putLong("medicament_id", medicament.getIdMedicament()); // Ajout de l'ID du médicament
+        detailMedicamentFragment.setArguments(bundle);
+        FragmentTransaction transaction = requireActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, detailMedicamentFragment);
+        transaction.addToBackStack(null); // Pour permettre le retour en arrière
+        transaction.commit();
     }
 }
