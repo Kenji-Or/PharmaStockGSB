@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.gsb.R;
 import com.example.gsb.data.model.Medicament;
 import com.example.gsb.databinding.FragmentHomeBinding;
+import com.example.gsb.ui.alert.AlertFragment;
 import com.example.gsb.ui.login.LoginFragment;
 import com.example.gsb.ui.medicaments.DetailMedicamentFragment;
 import com.example.gsb.ui.medicaments.MedicamentListFragment;
@@ -90,6 +91,16 @@ public class HomeFragment extends Fragment implements MedicamentExpiredDateListA
         });
 
         binding.buttonManageMedications.setOnClickListener(v -> goToMedicamentListFragment());
+
+        binding.alertButton.setOnClickListener(v -> goToAlertFragment());
+    }
+
+    private void goToAlertFragment() {
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.fragment_container, new AlertFragment());
+        fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
+        fragmentTransaction.commit();
     }
 
     private void navigateToProfileFragment() {

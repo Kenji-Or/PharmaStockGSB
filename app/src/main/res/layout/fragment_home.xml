@@ -16,6 +16,16 @@
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
         app:title="Tableau de Bord"
         >
+        <ImageButton
+            android:id="@+id/alertButton"
+            android:src="@drawable/baseline_circle_notifications_24"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:contentDescription="@string/alertes"
+            android:layout_gravity="center"
+            android:layout_marginStart="30dp"
+            android:backgroundTint="#3f4756"
+            />
         <Button
             android:id="@+id/buttonLogout"
             style="@style/buttonLogout"
@@ -50,11 +60,10 @@
             android:orientation="vertical"
             android:padding="16dp">
 
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewDateExpirationHome"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="400dp"
                 app:layout_constraintTop_toBottomOf="@id/toolbar"
                 app:layout_constraintBottom_toTopOf="@id/buttonManageMedications"
                 android:padding="16dp"

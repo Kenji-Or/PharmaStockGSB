@@ -55,4 +55,6 @@
     <string name="nomCategorie">Nom :</string>
     <string name="modification_d_une_categorie">Modification d\'une catégorie</string>
     <string name="filtrer_par_categorie">Filtrer par catégorie :</string>
+    <string name="alertes">Alertes</string>
+    <string name="info_alerte">info alerte</string>
 </resources>
