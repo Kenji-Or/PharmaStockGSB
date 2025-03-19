@@ -222,6 +222,25 @@ public class ApiService {
         queue.add(request);
     }
 
+    public void getMedicamentByCategorie(String token, int idCategorie, ApiCallback<JSONArray> callback) {
+        String url = BASE_URL + "medicament/categorie/" + idCategorie;
+
+        JsonArrayRequest request = new JsonArrayRequest(Request.Method.GET, url, null,
+                callback::onSuccess,
+                error -> callback.onError("Erreur de connexion: " + (error.networkResponse != null ? error.networkResponse.statusCode : "Unknown"))) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                headers.put("Content-Type", "application/json");
+                return headers;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(MyApplication.getAppContext());
+        queue.add(request);
+    }
+
     public void createUser(String token, String firstName, String lastName, String email, int idRole, String password, ApiCallback<JSONObject> callback) {
         String url = BASE_URL + "user/create";
         JSONObject jsonBody = new JSONObject();

@@ -11,6 +11,7 @@ import com.example.gsb.data.model.Medicament;
 import com.example.gsb.data.repository.CategorieRepository;
 import com.example.gsb.data.repository.MedicamentRepository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,8 +19,9 @@ import java.util.Map;
 public class MedicamentListViewModel extends ViewModel {
     private final MedicamentRepository medicamentRepository;
     private final CategorieRepository categorieRepository;
-    private MutableLiveData<Map<Integer, String>> categoriesMap = new MutableLiveData<>();
+    private final MutableLiveData<Map<Integer, String>> categoriesMap = new MutableLiveData<>();
     private final MutableLiveData<List<Medicament>> medicamentsLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<Categorie>> categoriesLiveData = new MutableLiveData<>();
     private final MutableLiveData<Boolean> isLoading = new MutableLiveData<>();
     private final MutableLiveData<String> errorMessage = new MutableLiveData<>();
 
@@ -39,35 +41,86 @@ public class MedicamentListViewModel extends ViewModel {
     public LiveData<String> getErrorMessage() {
         return errorMessage;
     }
+    public LiveData<List<Categorie>> getCategories() {
+        return categoriesLiveData;
+    }
     public LiveData<Map<Integer, String>> getCategoriesMap() {
         return categoriesMap;
     }
 
-    public void fetchMedicaments(String token) {
-        isLoading.setValue(true);
-        medicamentRepository.getAllMedicaments(token, new MedicamentRepository.MedicamentCallback() {
+    public void loadCategoriesForSpinner(String token) {
+        categorieRepository.getAllCategories(token, new CategorieRepository.CategoryCallback() {
             @Override
-            public void onSuccess(List<Medicament> medicaments) {
-                isLoading.postValue(false);
-                medicamentsLiveData.postValue(medicaments);
+            public void onSuccess(List<Categorie> categoriesList) {
+                categoriesLiveData.postValue(categoriesList);
             }
 
             @Override
-            public void onResult(Medicament medicament) {
-
+            public void onResult(Categorie categorie){
             }
 
             @Override
             public void onDeleted() {
-
             }
 
             @Override
-            public void onFailure(String error) {
-                isLoading.postValue(false);
-                errorMessage.postValue("Erreur API : " + error);
+            public void onFailure(String errorMessage) {
+                categoriesLiveData.postValue(new ArrayList<>());
             }
         });
+    }
+
+    public void fetchMedicaments(String token, int idCategorie) {
+        isLoading.setValue(true);
+        if (idCategorie == 0) {
+            medicamentRepository.getAllMedicaments(token, new MedicamentRepository.MedicamentCallback() {
+                @Override
+                public void onSuccess(List<Medicament> medicaments) {
+                    isLoading.postValue(false);
+                    medicamentsLiveData.postValue(medicaments);
+                }
+
+                @Override
+                public void onResult(Medicament medicament) {
+
+                }
+
+                @Override
+                public void onDeleted() {
+
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    isLoading.postValue(false);
+                    errorMessage.postValue("Erreur API : " + error);
+                }
+            });
+        } else {
+            medicamentRepository.getMedicamentByCategorieId(token, idCategorie, new MedicamentRepository.MedicamentCallback() {
+                @Override
+                public void onSuccess(List<Medicament> medicaments) {
+                    isLoading.postValue(false);
+                    medicamentsLiveData.postValue(medicaments);
+                }
+
+                @Override
+                public void onResult(Medicament medicament) {
+
+                }
+
+                @Override
+                public void onDeleted() {
+
+                }
+
+                @Override
+                public void onFailure(String error) {
+                    isLoading.postValue(false);
+                    errorMessage.postValue("Erreur API : " + error);
+                }
+            });
+        }
     }
 
     public void loadAllCategorie(String token) {
@@ -104,7 +157,7 @@ public class MedicamentListViewModel extends ViewModel {
             @Override
             public void onSuccess(List<Medicament> medicaments) {
                 isLoading.postValue(false);
-                fetchMedicaments(token);
+                fetchMedicaments(token, 0);
             }
 
             @Override
@@ -114,7 +167,7 @@ public class MedicamentListViewModel extends ViewModel {
             @Override
             public void onDeleted() {
                 isLoading.postValue(false);
-                fetchMedicaments(token);
+                fetchMedicaments(token, 0);
             }
 
             @Override

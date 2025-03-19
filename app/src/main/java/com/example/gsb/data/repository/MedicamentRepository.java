@@ -93,6 +93,43 @@ public class MedicamentRepository {
         });
     }
 
+    public void getMedicamentByCategorieId(String token, int categorieId, final  MedicamentCallback callback) {
+        apiService.getMedicamentByCategorie(token, categorieId, new ApiService.ApiCallback<JSONArray>() {
+            @Override
+            public void onSuccess(JSONArray response) {
+                List<Medicament> medicamentList = new ArrayList<>();
+                try {
+                    for(int i = 0; i < response.length(); i++) {
+                        JSONObject medicamentJson = response.getJSONObject(i);
+                        Medicament medicament = new Medicament(
+                                medicamentJson.getLong("id"),
+                                medicamentJson.getString("name"),
+                                medicamentJson.getInt("quantity"),
+                                medicamentJson.getInt("category"),
+                                medicamentJson.getString("date_expiration"),
+                                medicamentJson.getInt("alerte_stock")
+                        );
+                        medicamentList.add(medicament);
+                    }
+                    callback.onSuccess(medicamentList);
+                } catch (JSONException e) {
+                    Log.e("MedicamentListFragment", "Erreur de parsing JSON", e);
+                }
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                callback.onFailure(errorMessage);
+                Log.e("MedicamentListFragment", "Erreur API: " + errorMessage);
+            }
+
+            @Override
+            public void onFailure(String errorMessage) {
+                callback.onFailure(errorMessage);
+            }
+        });
+    }
+
     public void getMedicamentById(String token, Long medicamentId, final MedicamentCallback callback) {
         apiService.getMedicamentById(token, medicamentId, new ApiService.ApiCallback<JSONObject>() {
             @Override

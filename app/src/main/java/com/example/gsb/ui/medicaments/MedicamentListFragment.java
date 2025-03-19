@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -17,12 +18,16 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.gsb.R;
+import com.example.gsb.data.model.Categorie;
 import com.example.gsb.data.model.Medicament;
 import com.example.gsb.databinding.FragmentMedicamentListBinding;
 import com.example.gsb.ui.categorie.CategorieFragment;
 import com.example.gsb.ui.home.HomeFragment;
 import com.example.gsb.utils.JwtUtils;
 import com.example.gsb.utils.SharedPrefsHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MedicamentListFragment extends Fragment implements MedicamentListAdapter.OnMedicamentActionListener {
     private MedicamentListViewModel medicamentListViewModel;
@@ -40,10 +45,12 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         medicamentListViewModel = new ViewModelProvider(this).get(MedicamentListViewModel.class);
 
         String token = SharedPrefsHelper.getToken(requireContext());
+        int idCategorie = 0;
 
         if (token != null && !token.isEmpty()) {
-            medicamentListViewModel.fetchMedicaments(token);
+            medicamentListViewModel.fetchMedicaments(token, idCategorie);
             medicamentListViewModel.loadAllCategorie(token);
+            medicamentListViewModel.loadCategoriesForSpinner(token);
         } else {
             binding.errorTextView.setText("Aucun token trouvé. Veuillez vous connecter.");
             binding.errorTextView.setVisibility(View.VISIBLE);
@@ -63,6 +70,36 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        medicamentListViewModel.getCategories().observe(getViewLifecycleOwner(), categories -> {
+                    if (categories != null) {
+                        // Création de la liste des catégories avec "Toutes les catégories" au début
+                        List<Categorie> categoriesWithAll = new ArrayList<>();
+                        categoriesWithAll.add(new Categorie(0, "Toutes les catégories"));
+                        categoriesWithAll.addAll(categories);
+
+                        // Utilisation de l'adaptateur personnalisé
+                        FilterCategorySpinnerAdapter adapter = new FilterCategorySpinnerAdapter(requireContext(), categoriesWithAll);
+                        binding.spinnerCategories.setAdapter(adapter);
+                        // Gestion de la sélection d'une catégorie
+                        binding.spinnerCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                Categorie selectedCategory = categoriesWithAll.get(position);
+                                int categoryId = selectedCategory.getIdCategorie();
+                                String token = SharedPrefsHelper.getToken(requireContext());
+
+                                if (token != null && !token.isEmpty()) {
+                                    medicamentListViewModel.fetchMedicaments(token, categoryId);
+                                }
+                            }
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {
+                            }
+                        });
+                    }
+        });
+
 
         // Observer la mise à jour des catégories
         medicamentListViewModel.getCategoriesMap().observe(getViewLifecycleOwner(), categoriesMap -> {

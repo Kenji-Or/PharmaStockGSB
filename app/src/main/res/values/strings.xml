@@ -54,4 +54,5 @@
     <string name="nouvelle_categorie">Nouvelle catégorie</string>
     <string name="nomCategorie">Nom :</string>
     <string name="modification_d_une_categorie">Modification d\'une catégorie</string>
+    <string name="filtrer_par_categorie">Filtrer par catégorie :</string>
 </resources>
