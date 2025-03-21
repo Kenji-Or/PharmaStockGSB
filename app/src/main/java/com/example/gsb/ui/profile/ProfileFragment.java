@@ -90,4 +90,10 @@ public class ProfileFragment extends Fragment {
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }

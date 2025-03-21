@@ -62,4 +62,10 @@ public class CreateCategorieFragment extends Fragment {
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }

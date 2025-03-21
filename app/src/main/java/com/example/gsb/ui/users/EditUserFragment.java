@@ -150,4 +150,10 @@ public class EditUserFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
+
 }

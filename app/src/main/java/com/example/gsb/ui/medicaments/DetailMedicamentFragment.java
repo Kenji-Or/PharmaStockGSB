@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.gsb.R;
 import com.example.gsb.databinding.FragmentDetailMedicamentBinding;
-import com.example.gsb.ui.users.EditUserFragment;
 import com.example.gsb.utils.SharedPrefsHelper;
 
 public class DetailMedicamentFragment extends Fragment {
@@ -80,5 +79,11 @@ public class DetailMedicamentFragment extends Fragment {
         fragmentTransaction.replace(R.id.fragment_container, new MedicamentListFragment());
         fragmentTransaction.addToBackStack(null); // Ajoute la transaction à la pile de retour
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
     }
 }

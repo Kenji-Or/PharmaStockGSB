@@ -6,14 +6,11 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.gsb.data.model.Categorie;
 import com.example.gsb.data.model.Medicament;
-import com.example.gsb.data.model.Role;
-import com.example.gsb.data.model.User;
 import com.example.gsb.data.repository.CategorieRepository;
 import com.example.gsb.data.repository.MedicamentRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class EditMedicamentViewModel extends ViewModel {
     private final MedicamentRepository medicamentRepository;

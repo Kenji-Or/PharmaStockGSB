@@ -126,4 +126,10 @@ public class CategorieFragment extends Fragment implements CategorieAdapter.OnCa
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }

@@ -171,4 +171,10 @@ public class HomeFragment extends Fragment implements MedicamentExpiredDateListA
         transaction.addToBackStack(null); // Pour permettre le retour en arrière
         transaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }

@@ -99,4 +99,10 @@ public class AlertFragment extends Fragment implements AlertAdapter.OnAlertActio
         transaction.addToBackStack(null); // Pour permettre le retour en arrière
         transaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }

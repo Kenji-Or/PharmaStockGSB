@@ -203,4 +203,10 @@ public class MedicamentListFragment extends Fragment implements MedicamentListAd
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Libérer la mémoire
+    }
 }
