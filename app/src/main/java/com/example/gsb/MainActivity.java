@@ -17,11 +17,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // Vérifiez si l'utilisateur est déjà connecté
-        if (SharedPrefsHelper.getToken(this) != null) {
+        if (SharedPrefsHelper.isTokenValid(this)) {
             // Si l'utilisateur est connecté, affichez le fragment Home
             loadFragment(new HomeFragment());
         } else {
             // Sinon, affichez le fragment Login
+            SharedPrefsHelper.clearToken();
             loadFragment(new LoginFragment());
         }
     }

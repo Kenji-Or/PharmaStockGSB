@@ -72,7 +72,7 @@ public class AuthRepository {
         });
     }
 
-    // ✅ Ajout d'une méthode pour vérifier si l'utilisateur est connecté
+    // Ajout d'une méthode pour vérifier si l'utilisateur est connecté
     public boolean isLoggedIn() {
         String token = SharedPrefsHelper.getToken(MyApplication.getAppContext());
         return token != null && !token.isEmpty();

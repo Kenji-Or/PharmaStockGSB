@@ -96,7 +96,7 @@ public class CategorieFragment extends Fragment implements CategorieAdapter.OnCa
     public void onDeleteClick(Categorie categorie) {
         // Show a confirmation dialog before deleting
         new AlertDialog.Builder(getContext())
-                .setMessage("Êtes-vous sûr de vouloir supprimer cette catégorie ?")
+                .setMessage("Si des médicaments contiennent cette catégorie, ils seront supprimés. Êtes-vous sûr de vouloir supprimer cette catégorie ?")
                 .setCancelable(false)
                 .setPositiveButton("Oui", (dialog, id) -> {
                     String token = SharedPrefsHelper.getToken(requireContext());
