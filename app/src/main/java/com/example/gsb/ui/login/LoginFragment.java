@@ -54,6 +54,8 @@ public class LoginFragment extends Fragment {
                 Toast.makeText(getActivity(), "Erreur: " + errorMsg, Toast.LENGTH_LONG).show();
             }
         });
+
+        binding.textViewMotDePasseOublie.setOnClickListener(v -> Toast.makeText(getActivity(), "Veuillez contacter un administrateur afin qu'il réinitialise votre mot de passe.", Toast.LENGTH_SHORT).show());
     }
 
     private void goToHomeFragment() {
